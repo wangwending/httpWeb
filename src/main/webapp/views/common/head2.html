@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="common_header">
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=9;IE=8;IE=EDGE"/>
+    <title>平台管理中心</title>
+	 <style>
+	body{background-color: #fff; font-size: 18px; color: #333;}
+	.row{ margin: 20px; }
+	.title{ font-size: 16px; color: #222; background: #DDDDDD; height: 40px; line-height: 40px; text-indent: 10px;}
+	.box{ margin: 10px 0 0 0; border: #ececec solid 1px;}
+	.inner_title{border-bottom: #ececec solid 1px; line-height: 40px; color: #222;text-indent: 10px; background: #f4f4f4;}
+	.inner_box ul{ margin: 10px 0;}
+	.inner_box ul li{ list-style: none; width: 33.33%; float: left; text-align: left; line-height: 30px; text-indent: 10px;}
+	.inner_box1 ul li{ list-style: none; width: 50%; float: left; text-align: left; line-height: 30px; text-indent: 10px;}
+	.tab_box{border: 0; width: 100%; line-height: 30px;}
+	.tab_box tr td{ width: 20%; text-align: center;}
+	.pic_box{ margin: 10px auto; width: 100px; display: inline-block;}
+	.pic_box img{ width: 100%;}
+</style> 
+    <!--全局通用框架样式 begin-->
+    <!-- Tell the browser to be responsive to screen width -->
+    <link rel="stylesheet" th:href="@{/res/js/jquery-easyui/themes/bootstrap/easyui.css}">
+    <link rel="stylesheet" th:href="@{/res/js/jquery-easyui/themes/icon.css}">
+    <link rel="stylesheet" th:href="@{/res/js/jquery-easyui/themes/color.css}">
+    <link rel="stylesheet" th:href="@{/res/css/common.css}">
+    <link rel="stylesheet" th:href="@{/res/css/icon.css}">
+    <link rel="stylesheet" th:href="@{/res/css/jquery.datetimepicker.css}">
+    <!--全局通用框架样式 end-->
+    <!--/* Per-page placeholder for additional links */-->
+    <!-- <th:block th:replace="${links}" /> -->
+    <!--/* Per-page placeholder for additional styles */-->
+    <!-- <th:block th:replace="${styles}" /> -->
+    
+    <script type="text/javascript">
+        document.domain="127.0.0.1";
+        var basePath = '..';
+        var noAuthBtn = '';
+        var authField = '';
+        var urlOrigin = document.location.origin;
+    </script>
+    <script th:src="@{/res/js/jquery-easyui/jquery.min.js}"></script>
+    <script th:src="@{/res/js/jquery-easyui/jquery.easyui.min.js}"></script>
+    <script th:src="@{/res/js/jquery-easyui/locale/easyui-lang-zh_CN.js}"></script>
+    <script th:src="@{/res/js/common.js}"></script>
+    <script th:src="@{/res/js/jquery.datetimepicker.js}"></script>
+</head>

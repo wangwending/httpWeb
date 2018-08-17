@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<!-- 不传递样式和js参数 -->
+<head th:replace="common/head :: common_header(~{},~{})">
+</head>
+<body>
+<div class="easyui-panel addPage" data-options="fit:true,border:false,novalidate:true">
+	<form class="easyui-form" id="ff" method="post" data-options="novalidate:true">
+		<table>
+			<tr>
+				<td>
+					<span class="adertisement">编码: </span>
+					<input required="required" readonly="readonly" class="easyui-textbox" type="text" id="activityid" name="activityid" th:value="${activity.activityid}" />
+				</td>
+				<td>
+					<span class="adertisement">更多链接：</span>
+					<input type="text" id="linkurl" name="linkurl" th:value="${activity.linkurl}"></input>
+				</td>				
+			</tr>
+			<tr>
+				<td>
+					<span class="adertisement">名称：</span>
+					<input required="true" class="easyui-validatebox" type="text" id="activityname" name="activityname" th:value="${activity.activityname}"></input>
+				</td>
+				<td>
+					<span class="adertisement">数量：</span>
+					<!-- <input required="true" class="easyui-validatebox easyui-numberbox" type="text" id="count" name="count" th:value="${activity.count}"></input> -->
+					<input onkeyup="th:value=value.replace(/[^0-9]/g,'')" onpaste="th:value=value.replace(/[^0-9]/g,'')" 
+					oncontextmenu = "th:value=value.replace(/[^0-9]/g,'')" required="true" type="text" id="count" name="count" th:value="${activity.count}" maxlength="10"/>
+				</td>				
+			</tr>		
+			<tr>
+				<td>
+					<span class="search_item">
+						        <span class="adertisement">使用平台: </span>
+						        <span class="item_obj">
+						           	<input class="easyui-combobox" th:value="${activity.useplat}" name="useplat" id="useplat" style="width:100px" data-options="
+						           			valueField: 'id',
+						    				textField: 'text',
+						    				panelHeight:'auto',
+						    				editable:false,
+						           			data: [
+						           				{id:'APP', text:'APP'}
+							            		,{id:'H5', text:'H5'}
+							            		,{id:'PC', text:'PC'}
+						           			]
+						           	" /></span>
+					 </span>
+				</td>
+				<td>
+					<span class="adertisement">广告说明：</span>
+					<input maxlength="50" class="easyui-validatebox" type="text" id="activitydesc" name="activitydesc" th:value="${activity.activitydesc}"></input>
+				</td>				
+			</tr>
+			<tr>
+				<td>
+					<span class="search_item">
+						  <span class="adertisement">状态: </span>
+						  <span class="item_obj">
+						        <input class="easyui-combobox" th:value="${activity.state}" name="state" id="state" style="width:100px" data-options="
+						           			valueField: 'id',
+						    				textField: 'text',
+						    				panelHeight:'auto',
+						    				editable:false,
+						           			data: [
+						           				{id:'1', text:'禁用'}
+							            		,{id:'0', text:'启用'}
+						           			]
+						           	" /></span>
+					 </span>
+				</td>			
+			</tr>
+			<tr>
+            	<td>
+            	<div data-options="region:'south',border:false" style="text-align: right; padding: 12px; border-top-width: 0px; border-top-style: solid; border-top-color: rgb(221, 221, 221); width: 674px; height: 28px;" title="" class="panel-body panel-body-noheader panel-body-noborder layout-body">
+            		<a class="easyui-linkbutton color1 l-btn l-btn-small" href="javascript:void(0)" onclick="javascript:save();" style="width: 220px;">
+            			<span class="l-btn-center" style="margin-top: 0px;"><span class="l-btn-text">确定</span></span>
+            		</a>
+        		</div>
+            	</td>
+            </tr>				
+		</table>
+	</form>
+</div>
+<script type="text/javascript">
+function save() {
+	$("#ff").form('submit', { 
+        url: urlPrefix+"/updateActivity",
+        onSubmit: function () {   
+        	//表单提交前的回调函数 
+        	if(!$("#ff").form('enableValidation').form('validate')) {
+            	$.messager.alert('操作结果','请检查标红输入项','error');
+        		return false;
+        	}       	
+        	
+        }, 
+        success: function (v) {
+        	$.messager.alert('操作结果','修改成功！','info',function(){location.replace(urlPrefix+'/list')});
+    	} 
+      }); 
+}
+</script>
+</body>
+</html>

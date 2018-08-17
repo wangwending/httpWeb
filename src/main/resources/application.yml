@@ -1,0 +1,27 @@
+spring: 
+  profiles: 
+    active: dev
+---
+#开发环境
+spring:
+  profiles: dev
+
+server:
+  port: 8888
+
+---
+#测试环境
+spring:
+  profiles: test
+  
+server:
+  port: 8889
+  
+---
+#生产环境
+spring:
+  profiles: prod
+  
+server:
+  port: 8810
+   

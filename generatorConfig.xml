@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+  <classPathEntry location="C:\Users\wang.wending\.m2\repository\mysql\mysql-connector-java\5.1.39\mysql-connector-java-5.1.39.jar"/>
+  <context id="context1">
+    <commentGenerator>
+    	<property name="suppressDate" value="true"/>
+    	<property name="suppressAllComments" value="true"/>
+    </commentGenerator>
+    <jdbcConnection connectionURL="jdbc:mysql://172.16.16.20:3306/cloud_platform" driverClass="com.mysql.jdbc.Driver" password="123456" userId="root" />
+    <javaModelGenerator targetPackage="com.busi.model" targetProject="httpWeb" />
+    <sqlMapGenerator targetPackage="com.busi.mapper.impl" targetProject="httpWeb" />
+    <javaClientGenerator targetPackage="com.busi.mapper" targetProject="httpWeb" type="XMLMAPPER" />
+    <table tableName="Student" domainObjectName="Student">
+    </table>
+  </context>
+</generatorConfiguration>

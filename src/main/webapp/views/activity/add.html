@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<!-- 不传递样式和js参数 -->
+<head th:replace="common/head :: common_header(~{},~{})">
+</head>
+<body>
+	<div class="easyui-panel addPage" data-options="fit:true,border:false,novalidate:true">
+		<form class="easyui-form" id="ff" method="post" data-options="novalidate:true">
+			<table>
+				<tr>
+					<td>
+						<span class="adertisement">编码: </span>
+					    <input onkeypress="keyPress()" required="required" type="text" id="activityid" name="activityid" value="" />
+						<!-- <input onkeypress="keyPress()" onkeyup="value=value.replace(/[^\a-\z\A-\Z0-9-]/g,'')" onpaste="value=value.replace(/[^\a-\z\A-\Z0-9-]/g,'')" 
+						oncontextmenu = "value=value.replace(/[^\a-\z\A-\Z0-9-]/g,'')" required="required" type="text" id="activityid" name="activityid" value=""/> -->
+					</td>
+					<td>
+						<span class="adertisement">更多链接：</span>
+						<input class="easyui-validatebox" type="text" id="linkurl" name="linkurl" value=""></input>
+					</td>				
+				</tr>
+				<tr>
+					<td>
+						<span class="adertisement">名称：</span>
+						<input required="true" class="easyui-validatebox" type="text" id="activityname" name="activityname" value=""></input>
+					</td>
+					<td>
+						<span class="adertisement">数量：</span>
+						<!-- <input required="true" class="easyui-validatebox easyui-numberbox" type="text" id="count" name="count" value=""></input> -->
+						<input onkeyup="value=value.replace(/[^0-9]/g,'')" onpaste="value=value.replace(/[^0-9]/g,'')" 
+						oncontextmenu = "value=value.replace(/[^0-9]/g,'')" required="true" type="text" id="count" name="count" value="" maxlength="10"/>
+					</td>				
+				</tr>		
+				<tr>
+					<td>
+						<span class="search_item">
+							        <span class="adertisement">使用平台: </span>
+							        <span class="item_obj">
+							           	<input class="easyui-combobox" name="useplat" id="useplat" style="width:100px" data-options="
+							           			valueField: 'id',
+							    				textField: 'text',
+							    				panelHeight:'auto',
+							    				editable:false,
+							           			data: [
+							           				{id:'APP', text:'APP','selected':true}
+								            		,{id:'H5', text:'H5'}
+								            		,{id:'PC', text:'PC'}
+							           			]
+							           	" />
+							         </span>
+						 </span>
+					</td>
+					<td>
+						<span class="adertisement">广告说明：</span>
+						<input maxlength="50" class="easyui-validatebox" type="text" id="activitydesc" name="activitydesc" value=""></input>
+					</td>				
+				</tr>
+				<tr>
+					<td>
+						<span class="search_item">
+							  <span class="adertisement">状态: </span>
+							  <span class="item_obj">
+							        <input class="easyui-combobox" name="state" id="state" style="width:100px" data-options="
+							           			valueField: 'id',
+							    				textField: 'text',
+							    				panelHeight:'auto',
+							    				editable:false,
+							           			data: [
+							           				{id:'1', text:'禁用','selected':true}
+								            		,{id:'0', text:'启用'}
+							           			]
+							           	" />
+							   </span>
+						 </span>
+					</td>			
+				</tr>
+				<tr>
+	            	<td>
+	            	<div data-options="region:'south',border:false" style="text-align: right; padding: 12px; border-top-width: 0px; border-top-style: solid; border-top-color: rgb(221, 221, 221); width: 674px; height: 28px;" title="" class="panel-body panel-body-noheader panel-body-noborder layout-body">
+	            		<a class="easyui-linkbutton color1 l-btn l-btn-small" href="javascript:void(0)" onclick="javascript:save();" style="width: 220px;">
+	            			<span class="l-btn-center" style="margin-top: 0px;"><span class="l-btn-text">确定</span></span>
+	            		</a>
+	        		</div>
+	            	</td>
+	            </tr>				
+			</table>
+		</form>
+	</div>
+	<script type="text/javascript">
+	function save() {
+		$("#ff").form('submit', { 
+	        url: urlPrefix+"/addActivity",
+	        onSubmit: function () {   
+	        	//表单提交前的回调函数 
+	        	if(!$("#ff").form('enableValidation').form('validate')) {
+	            	$.messager.alert('操作结果','请检查标红输入项','error');
+	        		return false;
+	        	}       	
+	        	
+	        }, 
+	        success: function (data) {
+	        	$.messager.alert('操作结果','添加成功！','info',function(){location.replace(urlPrefix+'/list')});
+	    	} 
+	      }); 
+	}
+	//js扩展功能
+	
+			function keyPress() {    
+					         var keyCode = event.keyCode;    
+					         if ((keyCode >= 48 && keyCode <= 57) ||(keyCode >=65 && keyCode <= 90) || (keyCode >=97 && keyCode<=122) || (keyCode == 95)){    
+					             event.returnValue = true;    
+					         } else {    
+					               event.returnValue = false;    
+					        }    
+					     } 
+	
+	</script>
+</body>
+</html>

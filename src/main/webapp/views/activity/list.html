@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<!-- 不传递样式和js参数 -->
+<head th:replace="common/head :: common_header(~{},~{})">
+</head>
+<body>
+
+	<table id="dg"></table>
+	<div id="tb" style="padding: 2px 5px;">
+		<div class="wrap_search">
+			<span class="search_item"> <span class="item_text">编码:
+			</span> <span class="item_obj"> <input class="easyui-textbox"
+					type="text" name="activityid" value="" />
+			</span>
+			</span> <span class="search_item"> <span class="item_text">名称:
+			</span> <span class="item_obj"> <input class="easyui-textbox"
+					type="text" name="activityname" value="" />
+			</span>
+			</span>
+			<!--  <span class="search_item">
+							        <span class="item_text">类型: </span>
+							        <span class="item_obj">
+							           	<input class="easyui-combobox" name="type" id="type" style="width:100px" data-options="
+							           			valueField: 'id',
+							    				textField: 'text',
+							    				panelHeight:'auto',
+							    				editable:false,
+							           			data: [
+							           				{id:'', text:'全部','selected':true}
+							           				,{id:'0', text:'图片'}
+								            		,{id:'1', text:'文字'}
+							           			]
+							           	" />
+							        </span>    
+							    </span> -->
+			<span class="search_item"> <span class="item_text">使用平台:
+			</span> <span class="item_obj"> <input class="easyui-combobox"
+					name="useplat" id="useplat" style="width: 100px"
+					data-options="
+							           			valueField: 'id',
+							    				textField: 'text',
+							    				panelHeight:'auto',
+							    				editable:false,
+							           			data: [
+							           				{id:'', text:'全部','selected':true}
+							           				,{id:'APP', text:'APP'}
+								            		,{id:'H5', text:'H5'}
+								            		,{id:'PC', text:'PC'}
+							           			]
+							           	" />
+			</span>
+			</span>
+		</div>
+		<div style="text-align: left; margin: 6px;">
+			<a href="javascript:void(0)" class="easyui-linkbutton addBtn"
+				iconCls="glyphicon-plus" plain="true" onclick="add()">新增</a> <a
+				href="javascript:void(0)" class="easyui-linkbutton updateBtn"
+				iconCls="glyphicon-pencil" plain="true" onclick="update()">编辑</a> 
+			<a href="javascript:void(0)" class="easyui-linkbutton addBtn"
+				iconCls="glyphicon-remove" plain="true" onclick="delete1()">删除</a>
+			<!-- <a href="javascript:void(0)" class="easyui-linkbutton previewBtn" iconCls="glyphicon-eye-open" plain="true" onclick="goodsPreview()">商品预览</a> -->
+			<div id="searchBtnWrap" style="float: right; padding-right: 40px;">
+				<a href="javascript:void(0)" class="easyui-linkbutton"
+					iconCls="glyphicon-search" onclick="zcurdSearch(this)">搜索</a>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		var datagrid = $("#dg");
+		var dgOptions = {
+			rownumbers : true,
+			fit : true,
+			border : false,
+			striped : true,
+			rownumbers : true,
+			url : urlPrefix+'/listActivity',
+			method : 'post',
+			toolbar : '#tb',
+			pageSize : 20,
+			pagination : true,
+			multiSort : true,
+			singleSelect : true,
+			//         queryParams: getInitParam(),
+			columns : [ [ {
+				field : 'activityid',
+				title : '编码',
+				width : 100
+			}, {
+				field : 'activityname',
+				title : '活动名称',
+				width : 100
+			}, {
+				field : 'linkurl',
+				title : '更多链接',
+				width : 80
+			}, {
+				field : 'useplat',
+				title : '使用平台',
+				width : 80
+			}, {
+				field : 'count',
+				title : '数量',
+				width : 80
+			}, {
+				field : 'activitydesc',
+				title : '广告说明',
+				width : 80
+			}, {
+				field : 'state',
+				title : '状态',
+				width : 80,
+				formatter : formatstate
+			}, {
+				field : 'modtime',
+				title : '修改时间',
+				width : 112
+			}, {
+				field : 'createuser',
+				title : '创建人',
+				width : 80
+			}, {
+				field : 'intime',
+				title : '创建时间',
+				width : 113
+			} ] ]
+		};
+		$(function() {
+			datagrid.datagrid(dgOptions);
+		});
+
+		function add() {
+			location.replace(urlPrefix+"/add");
+		}
+		function update() {
+			var rowsSel = datagrid.datagrid("getSelections");
+			if (rowsSel.length != 1) {
+				showWarnMsg("请选择一条数据！");
+				return;
+			}
+			var activityid = rowsSel[0].activityid;
+			location.replace(urlPrefix+'/update?activityid='+activityid);
+		}
+
+		function delete1() {
+			var rowsSel = datagrid.datagrid("getSelections");
+			if (rowsSel.length != 1) {
+				showWarnMsg("请选择一条数据！");
+				return;
+			}
+			var activityid = rowsSel[0].activityid;
+			confirmMsg("确认删除吗？", function() {
+				var activityid = rowsSel[0].activityid;
+				$.post(urlPrefix+"/deleteActivity", {
+					activityid : activityid
+				}, function(result) {
+					var ret = JSON.parse(result);
+					if (ret.ret	 == '0000') {
+						showMsg("删除成功！");
+						datagrid.datagrid("reload");
+					} else {
+						showWarnMsg(result);
+						return;
+					}
+				});
+			});
+		}
+
+		function cancelAudit() {
+			var rowsSel = datagrid.datagrid("getSelections");
+			if (rowsSel.length != 1) {
+				showWarnMsg("请选择一条数据！");
+				return;
+			}
+			var activityid = rowsSel[0].activityid;
+			location.replace('adcurationPage?activityid=' + activityid);
+		}
+
+		//var s_time = 0;
+		function zcurdSearch() {
+			var param = zcurdGetParam();
+			//if(s_time==0){
+			//	datagrid.datagrid(dgOptions);
+			//	s_time++;
+			//}else{
+			datagrid.datagrid("load", param);
+			//}
+		}
+
+		function zcurdGetParam() {
+			var param = {};
+			$("#tb :input[name]").each(function(i, item) {
+				if ($(item).val()) {
+					param[$(item).attr("name")] = $(item).val().trim();
+				}
+			});
+			return param;
+		}
+
+		/* 
+		function formattype(value,row,index){
+			if(value == 0){
+				return "图片";
+			}else if(value == 1){
+				return "文字";
+			}
+		} */
+
+		function formatstate(value, row, index) {
+			if (value == 0) {
+				return "启用";
+			} else if (value == 1) {
+				return "禁用";
+			}
+		}
+	</script>
+</body>
+</html>

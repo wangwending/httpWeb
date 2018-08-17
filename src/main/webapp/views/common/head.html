@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="common_header(links,scripts)">
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=9;IE=8;IE=EDGE"/>
+    <title>平台管理中心</title>
+
+    <!--全局通用框架样式 begin-->
+    <!-- Tell the browser to be responsive to screen width -->
+    <link rel="stylesheet" th:href="@{http://www.wwd.com/static/views/res/js/jquery-easyui/themes/bootstrap/easyui.css}">
+    <link rel="stylesheet" th:href="@{http://www.wwd.com/static/views/res/js/jquery-easyui/themes/icon.css}">
+    <link rel="stylesheet" th:href="@{http://www.wwd.com/static/views/res/js/jquery-easyui/themes/color.css}">
+    <link rel="stylesheet" th:href="@{http://www.wwd.com/static/views/res/css/common.css}">
+    <link rel="stylesheet" th:href="@{http://www.wwd.com/static/views/res/css/icon.css}">
+    <link rel="stylesheet" th:href="@{http://www.wwd.com/static/views/res/css/jquery.datetimepicker.css}">
+    <!--全局通用框架样式 end-->
+    <!--/* Per-page placeholder for additional links */-->
+    <th:block th:replace="${links}" />
+    <!--/* Per-page placeholder for additional scripts */-->
+    <th:block th:replace="${scripts}" />
+    
+    <script type="text/javascript">
+        document.domain="www.wwd.com";
+        var basePath = '..';
+        var noAuthBtn = '';
+        var authField = '';
+        var urlPrefix = document.location.origin + "/httpWeb";
+    </script>
+    <script th:src="@{http://www.wwd.com/static/views/res/js/jquery-easyui/jquery.min.js}"></script>
+    <script th:src="@{http://www.wwd.com/static/views/res/js/jquery-easyui/jquery.easyui.min.js}"></script>
+    <script th:src="@{http://www.wwd.com/static/views/res/js/jquery-easyui/locale/easyui-lang-zh_CN.js}"></script>
+    <script th:src="@{http://www.wwd.com/static/views/res/js/common.js}"></script>
+    <script th:src="@{http://www.wwd.com/static/views/res/js/jquery.datetimepicker.js}"></script>
+</head>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=9;IE=8;IE=EDGE">
+<title>积分联盟业务管理平台</title>
+<link rel="stylesheet" type="text/css" href="http://www.wwd.com/static/views/res/js/jquery-easyui/themes/bootstrap/easyui.css">
+<link rel="stylesheet" type="text/css" href="http://www.wwd.com/static/views/res/js/jquery-easyui/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="http://www.wwd.com/static/views/res/js/jquery-easyui/themes/color.css">
+<link rel="stylesheet" type="text/css" href="http://www.wwd.com/static/views/res/css/common.css">
+<link rel="stylesheet" type="text/css" href="http://www.wwd.com/static/views/res/css/icon.css">
+<link rel="stylesheet" type="text/css" href="http://www.wwd.com/static/views/res/css/jquery.datetimepicker.css">
+
+<script type="text/javascript">
+	document.domain="www.wwd.com";
+	var basePath = '';
+	var noAuthBtn = '';
+	var authField = '';
+	var urlPrefix = document.location.origin + "/httpWeb";
+</script>
+<script type="text/javascript" src="http://www.wwd.com/static/views/res/js/jquery-easyui/jquery.min.js"></script>
+<script type="text/javascript" src="http://www.wwd.com/static/views/res/js/jquery-easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="http://www.wwd.com/static/views/res/js/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="http://www.wwd.com/static/views/res/js/common.js"></script>
+<script type="text/javascript" src="http://www.wwd.com/static/views/res/js/jquery.datetimepicker.js"></script>
+</head>
+<body style="visibility: hidden;">
+<table id="dg"></table>
+<div id="tb" style="padding:2px 5px;">
+	<div class="wrap_search">
+		<span class="search_item"> 	
+			<span class="item_text">借方科目号: </span>
+			<span class="item_obj"> 
+				<input class="easyui-textbox" type="text" name="lendsubid" id="lendsubid" value="" /> 
+			</span> 
+		</span> 
+		<span class="search_item"> 
+			<span class="item_text">借方账户ID: </span>
+			<span class="item_obj"> 
+				<input class="easyui-textbox" type="text" name="lendaccid" id="lendaccid" value="" /> 
+			</span> 
+		</span> 
+		<span class="search_item"> 
+			<span class="item_text">交易用户ID: </span>
+			<span class="item_obj"> 
+				<input class="easyui-textbox" type="text" name="transuserid" id="transuserid" value="" /> 
+			</span> 
+		</span> 
+		<span class="search_item"> 
+			<span class="item_text">贷方科目号: </span>
+			<span class="item_obj"> 
+				<input class="easyui-textbox" type="text" name="loansubid" id="loansubid" value="" /> 
+			</span> 
+		</span> 
+		<span class="search_item"> 
+			<span class="item_text">贷方账户ID: </span>
+			<span class="item_obj"> 
+				<input class="easyui-textbox" type="text" name="loanaccid" id="loanaccid" value="" /> 
+			</span> 
+		</span> 
+		<span class="search_item search_between">
+			<span class="item_text">结算日期: </span>
+				<span class="item_obj">
+					<input class="easyui-datebox" name="_start_time" value=""/> ～ <input class="easyui-datebox" name="_end_time" value=""/>
+				</span>
+		</span>
+	</div>
+	<div style="text-align: left; margin:6px;">
+		<div id="searchBtnWrap" style="float:right; padding-right:40px;">
+			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="glyphicon-search" onclick="zcurdSearch(this)">搜索</a> 
+			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="glyphicon-repeat" onclick="flushPage()">重置</a>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+var datagrid = $("#dg");
+
+var dgOptions = {
+    	fit:true,
+    	striped:true,
+    	border:false,
+        rownumbers:true,
+    	url: urlPrefix+'/test',
+    	method:'post',
+    	toolbar:'#tb',
+    	pageSize: 20,
+    	pagination:true,
+    	multiSort:false,
+    	singleSelect:true,
+        queryParams: getInitParam(),
+        columns: [[
+		         {field:'entryserialid', title: '分录系列号', width:120, sortable: false}
+	           	 ,{field:'lendsubid', title: '借方科目号', width:120, sortable: false}
+	           	 ,{field:'lendaccid', title: '借方账户ID', width:80, sortable: false}
+	           	,{field:'loansubid', title: '贷方科目号', width:80, sortable: false}
+	        	,{field:'loanaccid', title: '贷方账户ID', width:80, sortable: false}
+	        	,{field:'transcertserialid', title: '交易凭证系列号', width:100, sortable: false}
+	           	 ,{field:'transuserid', title: '交易用户ID', width:80, sortable: false}
+	           	 ,{field:'transtype', title: '交易类型', width:120, sortable: false}
+	           	 ,{field:'currency', title: '币种', width:120, sortable: false,formatter:formatCurrency}
+	           	 ,{field:'amount', title: '金额', width:120, sortable: false}
+	           	 ,{field:'entrycode', title: '分录代码', width:120, sortable: false}
+	           	 ,{field:'transdate', title: '交易日期', width:120, sortable: false}
+	           	 ,{field:'entryaccdate', title: '分录记账日期', width:120, sortable: false}
+	           	 ,{field:'settledate', title: '结算日期', width:120, sortable: false}
+	           ]]
+	};
+
+
+function formatCurrency(value,row,index) {
+	if (value == '0') {
+		return "现金";
+	}else {
+		return "积分";
+	}
+	
+}
+
+
+$(function() {
+	handleAuthDataRule();
+	datagrid.datagrid(dgOptions);
+});
+
+function zcurdSearch() {
+	var param = zcurdGetParam();
+	datagrid.datagrid("load", param);
+}
+
+function zcurdGetParam() {
+	var param = {};
+	$("#tb :input[name]").each(function(i, item) {
+		if($(item).val()) {
+			//param[$(item).attr("name")] = $(item).val().trim();	
+			param[$(item).attr("name")] = $(item).val();
+		}
+	});
+	return param;
+}
+
+function getInitParam() {
+	var param = {};
+	$("#tb :input[name]").each(function(i, item) {
+		if($(item).val()) {
+			param["queryParams[" + $(item).attr("name") + "]"] = $(item).val();	
+		}
+	});
+	return param;
+}
+
+var initPara = zcurdGetParam();
+
+/**
+ * 打开子页
+ */
+var _openSubPageFlag = false;
+function _openSubPage(pageUrl) {
+	if(!_openSubPageFlag) {
+		$("#subLayout").layout("expand", "east");
+		setTimeout(function() {
+			$("#subIframe").attr("src", pageUrl);
+		}, 600);
+		_openSubPageFlag = true;
+	}else {
+		$("#subIframe").attr("src", pageUrl);
+	}
+}
+
+//扩展js
+</script>
+</body>
+</html>

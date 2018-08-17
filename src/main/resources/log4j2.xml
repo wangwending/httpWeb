@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Configuration status="debug">
+	<Properties>
+		<Property name="fileName">httpWeb.log</Property>
+		<Property name="backupFilePatch">/data/logs/httpWeb/</Property>
+	</Properties>
+	
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<ThresholdFilter level="trace" onMatch="ACCEPT"
+				onMismatch="DENY" />
+			<PatternLayout
+				pattern="%n%-d{yyyy-MM-dd HH:mm:ss.SSS} [%p]-[Thread:%t]-[%C.%M()]: %m" />
+		</Console>
+
+		<RollingFile name="RollingFile" fileName="${backupFilePatch}${fileName}"
+			filePattern="${backupFilePatch}$${date:yyyy-MM}/app-%d{yyyyMMddHHmmssSSS}.log.gz">
+			<PatternLayout
+				pattern="%n%-d{yyyy-MM-dd HH:mm:ss.SSS} [%p]-[Thread:%t]-[%C.%M()]: %m" />
+
+			<SizeBasedTriggeringPolicy size="200MB" />
+			<DefaultRolloverStrategy max="20" />
+		</RollingFile>
+	</Appenders>
+
+	<Loggers>
+		<Root level="debug">
+			<AppenderRef ref="Console" />
+			<AppenderRef ref="RollingFile" />
+		</Root>
+	</Loggers>
+</Configuration>
